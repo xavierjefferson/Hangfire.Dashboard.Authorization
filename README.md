@@ -1,7 +1,7 @@
-Hangfire.Dashboard.Authorization
+Snork.AspNet.DashboardBuilder.Authorization
 ================================
 
-Some authorization filters for Hangfire's Dashboard.
+Some authorization filters for dashboards.
 
 Installation
 -------------
@@ -9,7 +9,7 @@ Installation
 This library is available as a NuGet Package:
 
 ```
-Install-Package Hangfire.Dashboard.Authorization
+Install-Package Snork.AspNet.DashboardBuilder.Authorization
 ```
 
 Usage
@@ -18,7 +18,7 @@ Usage
 ## OWIN-based authentication
 
 ```csharp
-using Hangfire.Dashboard;
+
 
 public void Configure(IAppBuilder app)
 {
@@ -26,17 +26,18 @@ public void Configure(IAppBuilder app)
     {
         AuthorizationFilters = new [] 
         {
-            new AuthorizationFilter { Users = "admin, superuser", Roles = "advanced" },
+            new UserAndRoleAuthorizationFilter { Users = "admin, superuser", Roles = "advanced" },
             new ClaimsBasedAuthorizationFilter("name", "value")
         }
     };
-    app.UseHangfireDashboard("/hangfire", options);
+	//replace with proper dashboard init code
+    app.UseSysInfoDashboard("/sysinfo", options);
 }
 ```
 
 ## Basic authentication
 
- *Note:* If you are using basic authentication together with OWIN security, configure Hangfire *BEFORE* OWIN security configuration.
+ *Note:* If you are using basic authentication together with OWIN security, configure the dashboard *BEFORE* OWIN security configuration.
  
 Please, keep in mind, if you have no SSL-based instance for your web application you have to disable `SslRedirect` and `RequireSsl` options (it's enabled by default for security reasons). Otherwise you will have dead redirect.
 
