@@ -1,0 +1,29 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Snork.AspNet.DashboardBuilder.Authorization</id>
+    <version>0.0.0</version>
+    <title>Dashboard Authorization Filters</title>
+    <authors>Xavier Jefferson</authors>
+    <owners>XavierJefferson</owners>
+    <projectUrl>https://github.com/xavierjefferson/Snork.AspNet.DashboardBuilder.Authorization</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://www.gnu.org/licenses/lgpl-3.0.en.html</licenseUrl>
+    <description>Some authorization filters for dashboards</description>
+    <copyright>Copyright © 2018 Xavier Jefferson</copyright>
+    <tags>dashboard authorization</tags>
+    <releaseNotes>
+      https://github.com/xavierjefferson/Snork.AspNet.DashboardBuilder.Authorization/releases
+
+    </releaseNotes>
+	<dependencies>
+		<dependency id="Snork.AspNet.DashboardBuilder" version="1.0.5388" />
+	</dependencies>
+  </metadata>
+  <files>
+    <file src="Net45\Snork.AspNet.DashboardBuilder.Authorization.dll" target="lib\net45" />
+    <file src="Net45\dashboard.Dashboard.Authorization.xml" target="lib\net45" />
+    <file src="Net45\Snork.AspNet.DashboardBuilder.Authorization.pdb" target="lib\net45" />
+    <file src="..\src\dashboard.Dashboard.Authorization\**\*.cs" target="src" />
+  </files>
+</package>

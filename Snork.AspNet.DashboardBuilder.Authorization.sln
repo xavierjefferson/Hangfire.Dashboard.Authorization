@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangfire.Dashboard.Authorization", "src\Hangfire.Dashboard.Authorization\Hangfire.Dashboard.Authorization.csproj", "{F7A61858-4830-4F2A-A16B-3C655D85598B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snork.AspNet.DashboardBuilder.Authorization", "src\Hangfire.Dashboard.Authorization\Snork.AspNet.DashboardBuilder.Authorization.csproj", "{F7A61858-4830-4F2A-A16B-3C655D85598B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{21DA233C-9BF1-4741-82DA-C80BA41E71FA}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,8 +14,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F93FD6F8-B50E-4531-B1B3-F9668EED5AA1}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
-		nuspecs\Hangfire.Dashboard.Authorization.nuspec = nuspecs\Hangfire.Dashboard.Authorization.nuspec
 		psake-project.ps1 = psake-project.ps1
+		nuspecs\Snork.AspNet.DashboardBuilder.Authorization.nuspec = nuspecs\Snork.AspNet.DashboardBuilder.Authorization.nuspec
 	EndProjectSection
 EndProject
 Global
@@ -31,5 +31,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C4F4AD4D-613D-412B-A2EE-47EA319F2E30}
 	EndGlobalSection
 EndGlobal

@@ -3,10 +3,10 @@ using System.Collections;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Hangfire.Dashboard
+namespace Snork.AspNet.DashboardBuilder
 {
     /// <summary>
-    /// Represents user to access Hangfire dashboard via basic authentication
+    /// Represents user to access dashboard dashboard via basic authentication
     /// </summary>
     public class BasicAuthAuthorizationUser
     {

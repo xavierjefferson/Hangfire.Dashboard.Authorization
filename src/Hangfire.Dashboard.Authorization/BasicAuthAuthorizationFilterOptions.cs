@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace Hangfire.Dashboard
+namespace Snork.AspNet.DashboardBuilder
 {
     /// <summary>
-    /// Represents options for Hangfire basic authentication
+    /// Represents options for dashboard basic authentication
     /// </summary>
     public class BasicAuthAuthorizationFilterOptions
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public BasicAuthAuthorizationFilterOptions()
         {
             SslRedirect = true;
@@ -21,7 +24,7 @@ namespace Hangfire.Dashboard
         public bool SslRedirect { get; set; }
 
         /// <summary>
-        /// Requires SSL connection to access Hangfire dahsboard. It's strongly recommended to use SSL when you're using basic authentication.
+        /// Requires SSL connection to access dashboard dahsboard. It's strongly recommended to use SSL when you're using basic authentication.
         /// </summary>
         public bool RequireSsl { get; set; }
 
@@ -31,7 +34,7 @@ namespace Hangfire.Dashboard
         public bool LoginCaseSensitive { get; set; }
 
         /// <summary>
-        /// Represents users list to access Hangfire dashboard.
+        /// Represents users list to access dashboard dashboard.
         /// </summary>
         public IEnumerable<BasicAuthAuthorizationUser> Users { get; set; } 
     }

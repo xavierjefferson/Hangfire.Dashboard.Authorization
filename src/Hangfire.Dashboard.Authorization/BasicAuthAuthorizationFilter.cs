@@ -1,86 +1,108 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.Owin;
 
-namespace Hangfire.Dashboard
+namespace Snork.AspNet.DashboardBuilder
 {
     /// <summary>
-    /// Represents Hangfire authorization filter for basic authentication.
+    ///     Represents dashboard authorization filter for basic authentication.
     /// </summary>
-    /// <remarks>If you are using this together with OWIN security, configure Hangfire BEFORE OWIN security configuration.</remarks>
-    public class BasicAuthAuthorizationFilter : IAuthorizationFilter
+    /// <remarks>If you are using this together with OWIN security, configure dashboard BEFORE OWIN security configuration.</remarks>
+    public class BasicAuthAuthorizationFilter : IDashboardAuthorizationFilter
     {
         private readonly BasicAuthAuthorizationFilterOptions _options;
-        
-        public BasicAuthAuthorizationFilter()
-        	: this(new BasicAuthAuthorizationFilterOptions())
-        {
-        }
-        
-        public BasicAuthAuthorizationFilter(BasicAuthAuthorizationFilterOptions options)
-        {
-        	_options = options;
-        }
-        
-        public bool Authorize(IDictionary<string, object> owinEnvironment)
-        {
-            OwinContext context = new OwinContext(owinEnvironment);
 
-            if ((_options.SslRedirect == true) && (context.Request.Uri.Scheme != "https"))
+        private readonly string _applicationName;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="applicationName">A short name for your application.</param>
+        public BasicAuthAuthorizationFilter(string applicationName)
+            : this(new BasicAuthAuthorizationFilterOptions(), applicationName)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="applicationName">A short name for your application.</param>
+        public BasicAuthAuthorizationFilter(BasicAuthAuthorizationFilterOptions options, string applicationName)
+        {
+            _options = options;
+            _applicationName = applicationName;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dashboardContext"></param>
+        /// <returns></returns>
+        public bool Authorize(DashboardContext dashboardContext)
+        {
+            var owinDashboardContext = dashboardContext as OwinDashboardContext;
+            var owinContext = new OwinContext(owinDashboardContext.Environment);
+
+
+            if (_options.SslRedirect && !owinContext.Request.IsSecure)
             {
-                context.Response.OnSendingHeaders(state =>
+                owinContext.Response.OnSendingHeaders(state =>
                 {
-                    string redirectUri = new UriBuilder("https", context.Request.Uri.Host, 443, context.Request.Uri.PathAndQuery).ToString();
+                    var redirectUri = new UriBuilder("https", owinContext.Request.Uri.Host, 443,
+                        owinContext.Request.Uri.PathAndQuery).ToString();
 
-                    context.Response.StatusCode = 301;
-                    context.Response.Redirect(redirectUri);
+                    owinContext.Response.StatusCode = 301;
+                    owinContext.Response.Redirect(redirectUri);
                 }, null);
                 return false;
             }
 
-            if ((_options.RequireSsl == true) && (context.Request.IsSecure == false))
+            if (_options.RequireSsl && !owinContext.Request.IsSecure)
             {
-                context.Response.Write("Secure connection is required to access Hangfire Dashboard.");
+                owinContext.Response.Write(string.Format("Secure connection is required to access the {0} dashboard.",
+                    _applicationName));
                 return false;
             }
 
-            string header = context.Request.Headers["Authorization"];
+            var header = owinContext.Request.Headers["Authorization"];
 
-            if (String.IsNullOrWhiteSpace(header) == false)
+            if (!string.IsNullOrWhiteSpace(header) )
             {
-                AuthenticationHeaderValue authValues = AuthenticationHeaderValue.Parse(header);
+                var authValues = AuthenticationHeaderValue.Parse(header);
 
                 if ("Basic".Equals(authValues.Scheme, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    string parameter = Encoding.UTF8.GetString(Convert.FromBase64String(authValues.Parameter));
+                    var parameter = Encoding.UTF8.GetString(Convert.FromBase64String(authValues.Parameter));
                     var parts = parameter.Split(':');
 
                     if (parts.Length > 1)
                     {
-                        string login = parts[0];
-                        string password = parts[1];
+                        var login = parts[0];
+                        var password = parts[1];
 
-                        if ((String.IsNullOrWhiteSpace(login) == false) && (String.IsNullOrWhiteSpace(password) == false))
+                        if (string.IsNullOrWhiteSpace(login) == false && string.IsNullOrWhiteSpace(password) == false)
                         {
                             return _options
-                                .Users
-                                .Any(user => user.Validate(login, password, _options.LoginCaseSensitive))
-                                   || Challenge(context);
+                                       .Users
+                                       .Any(user => user.Validate(login, password, _options.LoginCaseSensitive))
+                                   || Challenge(owinContext);
                         }
                     }
                 }
             }
 
-            return Challenge(context);
+            return Challenge(owinContext);
         }
+
 
         private bool Challenge(OwinContext context)
         {
             context.Response.StatusCode = 401;
-            context.Response.Headers.Append("WWW-Authenticate", "Basic realm=\"Hangfire Dashboard\"");
+            context.Response.Headers.Append("WWW-Authenticate",
+                string.Format("Basic realm=\"{0} Dashboard\"", _applicationName));
 
             context.Response.Write("Authentication is required.");
 
